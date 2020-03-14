@@ -1,0 +1,51 @@
+version: '3'
+services:
+  agent:
+    build: ./agent
+    ports:
+      - "4000:3000"
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: travel_agent.activity
+    networks:
+      - reselbob_travel
+  auto:
+    build: ./app
+    environment:
+      APP_NAME: auto
+      APP_ITEMS: ford:fiat:bmw
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: travel_agent.activity
+    networks:
+      - reselbob_travel
+  lodging:
+    build: ./app
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: travel_agent.activity
+    environment:
+      APP_NAME: lodging
+      APP_ITEMS: hilton:westin:motel6
+    networks:
+      - reselbob_travel
+  airline:
+    build: ./app
+    environment:
+      APP_NAME: airline
+      APP_ITEMS: virgin:jetblue:delta
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: travel_agent.activity
+    networks:
+      - reselbob_travel
+networks:
+  reselbob_travel:
